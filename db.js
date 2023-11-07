@@ -18,10 +18,10 @@ function createTable(createTableQuery) {
       return client.query(createTableQuery);
     })
     .then(() => {
-      console.log('Events table created successfully');
+      console.log('Table created successfully');
     })
     .catch(error => {
-      console.error('Error creating events table:', error);
+      console.error('Error creating table:', error);
     })
     .finally(() => {
       // Disconnect from the database
@@ -31,7 +31,7 @@ function createTable(createTableQuery) {
 
 
 function createEventsTable() {
-    // Define the SQL query to create the events table
+  // Define the SQL query to create the events table
   const eventsTableQuery = `
     CREATE TABLE IF NOT EXISTS events (
       id serial PRIMARY KEY,
@@ -45,10 +45,11 @@ function createEventsTable() {
   createTable(eventsTableQuery);
 }
 
+
 function createUsersTable() {
   // Define the SQL query to create the users table
   const usersTableQuery = `
-    CREATE TABLE users (
+    CREATE TABLE IF NOT EXISTS users (
       user_id SERIAL PRIMARY KEY,
       username VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL,
@@ -57,7 +58,7 @@ function createUsersTable() {
       first_name VARCHAR(255),
       last_name VARCHAR(255),
       profile_picture_url TEXT,
-      date_of_birth DATE,
+      date_of_birth DATE
       -- Additional user profile information
     );
   `; // Closing backtick corrected
@@ -67,13 +68,13 @@ function createUsersTable() {
 
 function createEventOrganizersTable() {
     const eventOrganizersTableQuery = `
-        CREATE TABLE event_organizers (
+        CREATE TABLE IF NOT EXISTS  event_organizers (
             organizer_id SERIAL PRIMARY KEY,
             user_id INT REFERENCES users(user_id) NOT NULL,
             -- Organizer-specific attributes
             contact_information VARCHAR(255),
             organization_name VARCHAR(255),
-            event_management_history TEXT,
+            event_management_history TEXT
         );
     `;
     createTable(eventOrganizersTableQuery);
@@ -82,14 +83,14 @@ function createEventOrganizersTable() {
 
 function createPerformersTable() {
     const performersTableQuery = `
-        CREATE TABLE performers (
+        CREATE TABLE IF NOT EXISTS  performers (
             performer_id SERIAL PRIMARY KEY,
             user_id INT REFERENCES users(user_id) NOT NULL,
             -- Performer-specific attributes
             genre VARCHAR(50),
             skills TEXT,
             experience TEXT,
-            performance_history TEXT,
+            performance_history TEXT
         );
     `;
     createTable(performersTableQuery);
@@ -98,13 +99,13 @@ function createPerformersTable() {
 
 function createAttendeesTable() {
     const attendeesTableQuery = `
-        CREATE TABLE attendees (
+        CREATE TABLE IF NOT EXISTS  attendees (
             attendee_id SERIAL PRIMARY KEY,
             user_id INT REFERENCES users(user_id) NOT NULL,
             -- Attendee-specific attributes
             payment_preferences TEXT,
             billing_information TEXT,
-            attendance_history TEXT,
+            attendance_history TEXT
         );
     `;
     createTable(attendeesTableQuery);
@@ -113,13 +114,13 @@ function createAttendeesTable() {
 
 function createPaymentsTable() {
     const paymentsTableQuery = `
-        CREATE TABLE payments (
+        CREATE TABLE IF NOT EXISTS  payments (
             payment_id SERIAL PRIMARY KEY,
             sender_id INT REFERENCES users(user_id) NOT NULL,
             receiver_id INT REFERENCES users(user_id) NOT NULL,
             amount DECIMAL(10, 2) NOT NULL,
             payment_date TIMESTAMP NOT NULL,
-            payment_description TEXT,
+            payment_description TEXT
         );
     `;
     createTable(paymentsTableQuery);
@@ -128,13 +129,13 @@ function createPaymentsTable() {
 
 function createReviewsTable() {
     const reviewsTableQuery = `
-        CREATE TABLE reviews (
+        CREATE TABLE IF NOT EXISTS  reviews (
             review_id SERIAL PRIMARY KEY,
             reviewer_id INT REFERENCES users(user_id) NOT NULL,
             target_id INT NOT NULL,
             rating INT NOT NULL,
             review_text TEXT,
-            review_date TIMESTAMP NOT NULL,
+            review_date TIMESTAMP NOT NULL
         );
     `;
     createTable(reviewsTableQuery);
@@ -143,13 +144,13 @@ function createReviewsTable() {
 
 function createNotificationsTable() {
     const notificationsTableQuery = `
-        CREATE TABLE notifications (
+        CREATE TABLE IF NOT EXISTS  notifications (
             notification_id SERIAL PRIMARY KEY,
             recipient_id INT REFERENCES users(user_id) NOT NULL,
             sender_id INT REFERENCES users(user_id) NOT NULL,
             notification_type VARCHAR(50) NOT NULL,
             notification_content TEXT,
-            notification_date TIMESTAMP NOT NULL,
+            notification_date TIMESTAMP NOT NULL
         );
     `;
     createTable(notificationsTableQuery);
